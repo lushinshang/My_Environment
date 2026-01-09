@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>學習歷程中心 - 架構框架圖</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container { max-width: 1600px; margin: 0 auto; }
+
+    .header {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .header h1 { font-size: 2.5em; color: #333; margin-bottom: 10px; }
+    .header p { font-size: 1.1em; color: #666; margin-bottom: 15px; }
+
+    .stats {
+      display: flex;
+      gap: 30px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item { display: flex; align-items: center; gap: 10px; }
+    .stat-value { font-size: 1.8em; font-weight: bold; color: #667eea; }
+    .stat-label { color: #666; font-size: 0.95em; }
+
+    .diagram-section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow-x: auto;
+    }
+
+    .diagram-section h2 {
+      font-size: 1.8em;
+      color: #333;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #667eea;
+    }
+
+    /* Mermaid 容器：直接放文字，不包 <pre>，避免解析出錯 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+
+    .legend-color {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 0.8em;
+    }
+
+    .color-core { background: #667eea; }
+    .color-data { background: #f093fb; }
+    .color-process { background: #4facfe; }
+    .color-output { background: #43e97b; }
+    .color-external { background: #fa7b62; }
+
+    .features {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .features h2 {
+      font-size: 1.8em;
+      color: #333;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #667eea;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      padding: 20px;
+      border-left: 4px solid #667eea;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+
+    .feature-card h3 { color: #667eea; margin-bottom: 10px; font-size: 1.1em; }
+    .feature-card p { color: #666; line-height: 1.6; font-size: 0.95em; }
+    .feature-card ul { margin-left: 20px; margin-top: 10px; color: #666; }
+    .feature-card li { margin-bottom: 5px; font-size: 0.9em; }
+
+    .footer {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      color: #666;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .footer a { color: #667eea; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 1.8em; }
+      .diagram-section h2 { font-size: 1.3em; }
+      .stats { flex-direction: column; gap: 15px; }
+    }
+
+    .note {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      font-size: 0.95em;
+      color: #856404;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>📚 學習歷程中心</h1>
+      <p>AI 協作學習成果的結構化知識庫</p>
+
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value">101</div>
+          <div class="stat-label">小時學習記錄</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">25+</div>
+          <div class="stat-label">驗證框架</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">4</div>
+          <div class="stat-label">層級結構</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">1.4GB</div>
+          <div class="stat-label">知識規模</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 整體架構圖 -->
+    <div class="diagram-section">
+      <h2>🏗️ 整體架構</h2>
+      <div class="mermaid">
+graph TB
+    User["👤 用戶<br/>決策者 & 分析師"]
+
+    subgraph "記憶系統層級"
+        Layer1["Layer 1<br/>全域記憶<br/>CLAUDE_CORE.md"]
+        Layer2["Layer 2<br/>記憶中樞<br/>CLAUDE.md"]
+        Layer3["Layer 3<br/>學習歷程<br/>學習歷程中心"]
+    end
+
+    subgraph "學習歷程中心"
+        direction TB
+        Core["🎯 核心模塊<br/>- INDEX.md<br/>- CLAUDE.md<br/>- Makefile"]
+
+        TimelineSubsystem["📅 時間軸系統<br/>2025/2025-08/...<br/>時間序列學習"]
+        LessonSubsystem["📖 框架庫系統<br/>lessons-learned/<br/>25+ 驗證框架"]
+        KnowledgeSubsystem["🧠 知識系統<br/>knowledge-base/<br/>主題分類"]
+        DocsSubsystem["📄 文檔系統<br/>docs/<br/>Trinity 導航"]
+    end
+
+    subgraph "輸出與查詢"
+        GraphOutput["🔗 知識圖譜<br/>LEARNING_GRAPH.html<br/>互動式可視化"]
+        MarkdownIndex["📑 索引系統<br/>BY_PROBLEM.md<br/>BY_TECH.md<br/>BY_CATEGORY.md"]
+    end
+
+    User -->|提交學習紀錄| Layer1
+    Layer1 -->|匯總| Layer2
+    Layer2 -->|組織| Layer3
+
+    Layer3 --> Core
+    Core --> TimelineSubsystem
+    Core --> LessonSubsystem
+    Core --> KnowledgeSubsystem
+    Core --> DocsSubsystem
+
+    TimelineSubsystem --> GraphOutput
+    LessonSubsystem --> GraphOutput
+    KnowledgeSubsystem --> GraphOutput
+
+    LessonSubsystem --> MarkdownIndex
+    KnowledgeSubsystem --> MarkdownIndex
+
+    GraphOutput -->|視覺化展示| User
+    MarkdownIndex -->|索引查詢| User
+
+    style User fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Layer1 fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Layer2 fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Layer3 fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Core fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style TimelineSubsystem fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style LessonSubsystem fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style KnowledgeSubsystem fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style DocsSubsystem fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style GraphOutput fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style MarkdownIndex fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-color color-process">用</div><span>用戶交互層</span></div>
+        <div class="legend-item"><div class="legend-color color-core">核</div><span>核心數據層</span></div>
+        <div class="legend-item"><div class="legend-color color-data">子</div><span>子系統層</span></div>
+        <div class="legend-item"><div class="legend-color color-output">出</div><span>輸出查詢層</span></div>
+      </div>
+    </div>
+
+    <!-- 框架庫系統詳解 -->
+    <div class="diagram-section">
+      <h2>📖 框架庫系統（lessons-learned）</h2>
+      <div class="mermaid">
+graph LR
+    subgraph Input["輸入"]
+        Exp["實際經驗"]
+        Failure["失敗案例"]
+        Success["成功案例"]
+    end
+
+    subgraph Processing["組織層"]
+        Template["LESSON_TEMPLATE.md<br/>統一格式"]
+        Analysis["根因分析<br/>+ 框架提取"]
+    end
+
+    subgraph Storage["存儲層"]
+        Lessons["25+ 驗證框架<br/>AI2_recursive_thinking_framework.md<br/>EXAM05_LEARNING_SUMMARY.md<br/>其他專案 Lessons"]
+    end
+
+    subgraph Index["索引層"]
+        ByCategory["BY_CATEGORY.md<br/>按主題分類"]
+        ByProblem["BY_PROBLEM.md<br/>按問題分類"]
+        ByTech["BY_TECH.md<br/>按技術分類"]
+        BySeverity["BY_SEVERITY.md<br/>按重要度分類"]
+        ByTag["BY_TAG.md<br/>按標籤分類"]
+    end
+
+    subgraph Query["查詢方式"]
+        Direct["直接閱讀<br/>lessons-learned/"]
+        Search["［lessons］<br/>觸發詞搜尋"]
+        Category["按分類導航"]
+    end
+
+    Exp --> Template
+    Failure --> Template
+    Success --> Template
+
+    Template --> Analysis
+    Analysis --> Lessons
+
+    Lessons --> ByCategory
+    Lessons --> ByProblem
+    Lessons --> ByTech
+    Lessons --> BySeverity
+    Lessons --> ByTag
+
+    ByCategory --> Direct
+    ByProblem --> Direct
+    ByTech --> Direct
+    BySeverity --> Direct
+    ByTag --> Direct
+
+    Lessons --> Search
+    Lessons --> Category
+
+    style Exp fill:#fa7b62,stroke:#333,stroke-width:2px,color:#fff
+    style Failure fill:#fa7b62,stroke:#333,stroke-width:2px,color:#fff
+    style Success fill:#fa7b62,stroke:#333,stroke-width:2px,color:#fff
+    style Template fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Analysis fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Lessons fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style ByCategory fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style ByProblem fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style ByTech fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style BySeverity fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style ByTag fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Direct fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Search fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Category fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+      </div>
+
+      <div class="note">
+        <strong>📌 核心概念：</strong> 每個 lesson 經過「根因分析 → 框架提取 → 多維索引」的過程，使得知識可以被高效地查詢和複用。
+      </div>
+    </div>
+
+    <!-- 時間軸系統 -->
+    <div class="diagram-section">
+      <h2>📅 時間軸系統（2025 年度）</h2>
+      <div class="mermaid">
+graph TB
+    Start["2025 年開始"]
+
+    subgraph "2025-07"
+        Jul["20250703_information_retrieval<br/>37 個 Lessons"]
+    end
+
+    subgraph "2025-08"
+        Aug["20250813_AI_error_patterns<br/>錯誤知識庫<br/>README.md"]
+    end
+
+    subgraph "2025-09"
+        Sep1["20250912_langchain_applications<br/>LangChain 應用"]
+        Sep2["20250930_agentic_ai_fundamentals<br/>智能代理基礎<br/>AI_agents.md"]
+    end
+
+    subgraph "2025-09 Other"
+        Sep3["20250909_digital_innovation_meetup<br/>數位創新會議"]
+    end
+
+    subgraph "2025-10"
+        Oct["持續積累"]
+    end
+
+    subgraph "2025-11"
+        Nov["exam05 完整學習<br/>EXAM05_LEARNING_SUMMARY.md"]
+    end
+
+    subgraph "2025-12"
+        Dec["AI² 方法論<br/>AI2_recursive_thinking_framework.md"]
+    end
+
+    Start --> Jul
+    Jul --> Aug
+    Aug --> Sep1
+    Aug --> Sep2
+    Aug --> Sep3
+    Sep1 --> Oct
+    Sep2 --> Oct
+    Oct --> Nov
+    Nov --> Dec
+
+    Jul -->|文檔| DocLink1["知識圖譜"]
+    Aug -->|文檔| DocLink2["知識圖譜"]
+    Sep2 -->|文檔| DocLink3["知識圖譜"]
+    Nov -->|文檔| DocLink4["知識圖譜"]
+    Dec -->|文檔| DocLink5["知識圖譜"]
+
+    style Start fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Jul fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Aug fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Sep1 fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Sep2 fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Sep3 fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Oct fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Nov fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Dec fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style DocLink1 fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style DocLink2 fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style DocLink3 fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style DocLink4 fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style DocLink5 fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+      </div>
+    </div>
+
+    <!-- 數據流 -->
+    <div class="diagram-section">
+      <h2>🔄 數據流與查詢流程</h2>
+      <div class="mermaid">
+sequenceDiagram
+    participant User as 用戶
+    participant Query as 查詢層
+    participant Index as 索引層
+    participant Lesson as Lessons
+    participant Graph as 知識圖譜
+
+    User->>Query: 直接搜尋或［lessons］觸發詞
+
+    alt 按主題搜尋
+        Query->>Index: 查詢 BY_CATEGORY.md
+        Index->>Lesson: 返回相關 Lessons
+    else 按問題搜尋
+        Query->>Index: 查詢 BY_PROBLEM.md
+        Index->>Lesson: 返回相關 Lessons
+    else 按技術搜尋
+        Query->>Index: 查詢 BY_TECH.md
+        Index->>Lesson: 返回相關 Lessons
+    end
+
+    Lesson->>User: 返回框架、代碼、最佳實踐
+
+    opt 進階查詢
+        User->>Graph: 點擊知識圖譜
+        Graph->>Lesson: 視覺化展示關係
+        Lesson->>User: 顯示相關 Lessons 網絡
+    end
+
+    User->>User: 應用框架到實際工作
+      </div>
+    </div>
+
+    <!-- 核心特性 -->
+    <div class="features">
+      <h2>✨ 核心特性</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>📚 四層結構</h3>
+          <p>
+            <strong>Layer 1:</strong> 全域記憶（CLAUDE_CORE.md）<br />
+            <strong>Layer 2:</strong> 記憶中樞（CLAUDE.md）<br />
+            <strong>Layer 3:</strong> 學習歷程（本中心）<br />
+            <strong>Layer 4:</strong> 框架庫（25+ Lessons）
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3>📖 統一的 Lesson 格式</h3>
+          <ul>
+            <li>快速參考（供索引提取）</li>
+            <li>問題挖掘與根因分析</li>
+            <li>完整實現代碼</li>
+            <li>性能指標量化</li>
+            <li>應用指南與禁忌</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🔍 多維索引系統</h3>
+          <ul>
+            <li>按主題分類（BY_CATEGORY）</li>
+            <li>按問題分類（BY_PROBLEM）</li>
+            <li>按技術分類（BY_TECH）</li>
+            <li>按重要度分類（BY_SEVERITY）</li>
+            <li>按標籤分類（BY_TAG）</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🕐 時間軸追蹤</h3>
+          <ul>
+            <li>2025 年度完整記錄</li>
+            <li>日期序列化存儲</li>
+            <li>學習進度可視化</li>
+            <li>知識圖譜自動生成</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🔗 知識圖譜</h3>
+          <ul>
+            <li>LEARNING_GRAPH.html</li>
+            <li>互動式知識網絡</li>
+            <li>自動關係推導</li>
+            <li>可視化導航</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🎯 AI² 遞迴框架</h3>
+          <ul>
+            <li>五環決策方法論</li>
+            <li>[think-loop] 觸發詞</li>
+            <li>[think-shallow] 輕量版</li>
+            <li>可複用決策框架</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使用流程 -->
+    <div class="diagram-section">
+      <h2>🔧 使用流程</h2>
+      <div class="mermaid">
+graph LR
+    Start["🎯 有個問題"]
+
+    Decision1{這是最佳實踐<br/>或框架問題？}
+
+    Decision2{問題在<br/>記憶系統中？}
+
+    Path1["查詢 Lessons"]
+    Path1A["打開 BY_CATEGORY.md"]
+    Path1B["打開 BY_TECH.md"]
+    Path1C["使用 ［lessons］ 觸發詞"]
+
+    Path2["查詢索引"]
+    Path2A["查詢 CLAUDE_CORE.md"]
+    Path2B["查詢 CLAUDE_REFERENCE.md"]
+
+    VisualPath["視覺化查詢"]
+    VisualPath1["打開 LEARNING_GRAPH.html"]
+    VisualPath2["探索知識圖譜"]
+
+    NewLearning["這是新的經驗"]
+    Record["記錄 Lesson"]
+    Process["經歷 5 環<br/>提問→建模→測試→教學→撰寫"]
+    Store["存檔到<br/>lessons-learned/"]
+    Index["更新索引<br/>BY_*.md"]
+
+    ApplyPath["直接應用"]
+    Review["2-4 週後<br/>檢查效果"]
+
+    Start --> Decision1
+
+    Decision1 -->|是| Decision2
+    Decision1 -->|否| ApplyPath
+
+    Decision2 -->|是| Path1
+    Decision2 -->|否| VisualPath
+
+    Path1 --> Path1A
+    Path1 --> Path1B
+    Path1 --> Path1C
+
+    Path1A -->|找到| ApplyPath
+    Path1B -->|找到| ApplyPath
+    Path1C -->|找到| ApplyPath
+
+    VisualPath --> VisualPath1
+    VisualPath1 --> VisualPath2
+    VisualPath2 -->|找到| ApplyPath
+
+    Path1A -->|沒找到| NewLearning
+    Path1B -->|沒找到| NewLearning
+    Path1C -->|沒找到| NewLearning
+    VisualPath2 -->|沒找到| NewLearning
+
+    NewLearning --> Record
+    Record --> Process
+    Process --> Store
+    Store --> Index
+    Index --> ApplyPath
+
+    ApplyPath --> Review
+    Review -->|成功| Update["更新 Lesson<br/>記錄效果"]
+    Review -->|失敗| Refine["改進方案<br/>重新實驗"]
+
+    Update --> EndSuccess["✅ 知識演化"]
+    Refine --> Record
+
+    style Start fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Decision1 fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Decision2 fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Path1 fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Path2 fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style VisualPath fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style NewLearning fill:#fa7b62,stroke:#333,stroke-width:2px,color:#fff
+    style Record fill:#fa7b62,stroke:#333,stroke-width:2px,color:#fff
+    style Process fill:#fa7b62,stroke:#333,stroke-width:2px,color:#fff
+    style ApplyPath fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Review fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Update fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style EndSuccess fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Refine fill:#ffc107,stroke:#333,stroke-width:2px,color:#000
+      </div>
+    </div>
+
+    <!-- 統計信息 -->
+    <div class="diagram-section">
+      <h2>📊 統計與規模</h2>
+      <div class="mermaid">
+graph TB
+    subgraph Knowledge["知識規模"]
+        LL["📖 Lessons<br/>25+ 驗證框架<br/>成功案例 + 失敗案例<br/>決策框架庫"]
+        Timeline["📅 時間軸<br/>101 小時學習<br/>2025 年完整記錄"]
+        KB["🧠 知識庫<br/>主題分類<br/>跨專案索引"]
+        Docs["📄 文檔<br/>Trinity-docs<br/>GEMMA3 文檔"]
+    end
+
+    subgraph Indexing["索引規模"]
+        Cat["BY_CATEGORY<br/>10+ 主題"]
+        Tech["BY_TECH<br/>15+ 技術"]
+        Prob["BY_PROBLEM<br/>20+ 問題"]
+        Sev["BY_SEVERITY<br/>4 個等級"]
+        Tag["BY_TAG<br/>50+ 標籤"]
+    end
+
+    subgraph Query["查詢容量"]
+        Direct["📖 直接閱讀<br/>檔案系統導航"]
+        Trigger["🎯 ［lessons］ 觸發詞<br/>AI 智能搜尋"]
+        Graph["🔗 知識圖譜<br/>視覺化探索"]
+    end
+
+    subgraph Size["文件規模"]
+        Size1["1.4GB 總存儲"]
+        Size2["500+ Markdown 文件"]
+        Size3["1.4M+ 行文本"]
+        Size4["Interactive HTML 圖表"]
+    end
+
+    LL --> Cat
+    LL --> Tech
+    LL --> Prob
+    Timeline --> Sev
+    KB --> Tag
+
+    Cat --> Direct
+    Tech --> Direct
+    Prob --> Direct
+    Sev --> Trigger
+    Tag --> Trigger
+
+    Direct --> Size1
+    Trigger --> Size2
+    Graph --> Size3
+    Graph --> Size4
+
+    style LL fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Timeline fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style KB fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Docs fill:#4facfe,stroke:#333,stroke-width:2px,color:#fff
+    style Cat fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Tech fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Prob fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Sev fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Tag fill:#f093fb,stroke:#333,stroke-width:2px,color:#fff
+    style Direct fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Trigger fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Graph fill:#43e97b,stroke:#333,stroke-width:2px,color:#fff
+    style Size1 fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Size2 fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Size3 fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style Size4 fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+      </div>
+    </div>
+
+    <!-- 最佳實踐 -->
+    <div class="features">
+      <h2>🎯 最佳實踐</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>📝 編寫 Lesson 時</h3>
+          <ul>
+            <li>✅ 使用 LESSON_TEMPLATE.md</li>
+            <li>✅ 記錄「失敗 + 成功」</li>
+            <li>✅ 提供完整代碼</li>
+            <li>✅ 量化性能指標</li>
+            <li>❌ 不要只寫結論</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🔍 查詢框架時</h3>
+          <ul>
+            <li>✅ 先查 BY_CATEGORY</li>
+            <li>✅ 再查 BY_TECH</li>
+            <li>✅ 用 ［lessons］ 觸發詞</li>
+            <li>✅ 探索知識圖譜</li>
+            <li>❌ 不要靠記憶</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>📚 應用框架時</h3>
+          <ul>
+            <li>✅ 完整讀一遍</li>
+            <li>✅ 理解邊界條件</li>
+            <li>✅ 記錄調適過程</li>
+            <li>✅ 2-4 週後檢查</li>
+            <li>❌ 不要直接複製</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🔄 維護框架時</h3>
+          <ul>
+            <li>✅ 定期更新索引</li>
+            <li>✅ 標記過時框架</li>
+            <li>✅ 記錄演化過程</li>
+            <li>✅ 月度回顧</li>
+            <li>❌ 不要刪除舊記錄</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🎯 使用 AI² 時</h3>
+          <ul>
+            <li>✅ 重大決策 → [think-loop]</li>
+            <li>✅ 中等決策 → [think-shallow]</li>
+            <li>✅ 日常問題 → 直接問</li>
+            <li>✅ 產生框架 → 存檔</li>
+            <li>❌ 不要過度使用</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🚀 知識演化</h3>
+          <ul>
+            <li>✅ 每個決策產生框架</li>
+            <li>✅ 框架庫持續成長</li>
+            <li>✅ 決策速度加快</li>
+            <li>✅ 品質持續改善</li>
+            <li>❌ 不要停止記錄</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>
+        <strong>學習歷程中心</strong> |
+        <a href="./CLAUDE.md">CLAUDE.md</a> |
+        <a href="./INDEX.md">INDEX.md</a> |
+        <a href="./LEARNING_GRAPH.html">知識圖譜</a>
+      </p>
+      <p style="margin-top: 10px; font-size: 0.9em;">
+        最後更新：2026-01-09 |
+        由 Claude Code + AI² 方法論驅動
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // 讓 HTML label、換行更穩定
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: { htmlLabels: true, curve: 'basis' }
+    });
+  </script>
+</body>
+</html>
